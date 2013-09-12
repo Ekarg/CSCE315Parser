@@ -1,40 +1,34 @@
 ========================================================================
-    CONSOLE APPLICATION : parserMain Project Overview
+    DATABASE PROJECT :  PARSER
 ========================================================================
 
-AppWizard has created this parserMain application for you.
+To become a world-class levels of the full involvement and engagement - are a likely 
+part of people are now better able a few years ago; and engagement and product 
+development and practiced by world-class compete in they needs, and engagement based 
+market. A competitiveness. A work environment - are practices are a likely part of 
+people are designed to company. Human resource systems and management of shared 
+destiny will demand focused improving quality has a valuable a few years ago;
 
-This file contains a summary of what you will find in each of the files that
-make up your parserMain application.
 
+parser.cpp
+    Implementation of parser.
 
-parserMain.vcxproj
-    This is the main project file for VC++ projects generated using an Application Wizard.
-    It contains information about the version of Visual C++ that generated the file, and
-    information about the platforms, configurations, and project features selected with the
-    Application Wizard.
-
-parserMain.vcxproj.filters
-    This is the filters file for VC++ projects generated using an Application Wizard. 
-    It contains information about the association between the files in your project 
-    and the filters. This association is used in the IDE to show grouping of files with
-    similar extensions under a specific node (for e.g. ".cpp" files are associated with the
-    "Source Files" filter).
+parser.h
+    Header file for parser.
 
 parserMain.cpp
-    This is the main application source file.
+    Test file for parser.
+
 
 /////////////////////////////////////////////////////////////////////////////
 Other standard files:
 
 StdAfx.h, StdAfx.cpp
-    These files are used to build a precompiled header (PCH) file
-    named parserMain.pch and a precompiled types file named StdAfx.obj.
+    Things I don't understand that make Visual Studio not scream at me.
 
 /////////////////////////////////////////////////////////////////////////////
 Other notes:
-
-AppWizard uses "TODO:" comments to indicate parts of the source code you
-should add to or customize.
+	My notes are bad but at least it's better than a randomly generated 
+	README file.
 
 /////////////////////////////////////////////////////////////////////////////

@@ -1,3 +1,17 @@
+/* 
+    File: parser.h
+
+    Authors: Grace Coffman, Sidian Wu, Wesley Tang
+            Department of Computer Science
+            Texas A&M University
+			
+    This file contains the header for the database parser. 
+
+*/
+
+#ifndef _DATABASE_PARSER_
+#define _DATABASE_PARSER_
+
 #include <string>
 #include <vector> 
 
@@ -47,7 +61,7 @@ public:
 		open = "OPEN";
 		close = "CLOSE";
 		write = "WRITE";
-		exit = "EXIT";
+		exit = "EXIT;";
 		insert = "INSERT";
 		del = "DELETE";
 		create = "CREATE";
@@ -65,3 +79,5 @@ public:
 
 
 };
+
+#endif
