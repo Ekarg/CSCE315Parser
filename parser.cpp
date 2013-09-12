@@ -63,6 +63,10 @@ bool Parser::validate(string input) {
 	if(write.compare(first) == 0)
 	{
 		// GRACE COFFMAN
+		if(tokens.size() != 2)
+			return false;
+		if(tokens[1].back()!=';')
+			return false;
 		return true; 
 	}
 	if(exit.compare(first) == 0)
