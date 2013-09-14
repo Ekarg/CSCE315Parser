@@ -28,7 +28,8 @@ vector<string> Parser::tokenizer(string line) {
 	while(start!=NULL)
 	{
 		string s(start);
-		tokens.push_back(start);
+		//tokens.push_back(start);
+		tokens.push_ back(s);
 		start = strtok_s(NULL, " ", &next);
 	}
 	//START TROUBLESHOOTING ITERATOR	
@@ -53,11 +54,15 @@ bool Parser::validate(string input) {
 	if(open.compare(first) == 0)
 	{
 		// SID WU
+	    string rel_name = takens.at(1);
 		return true; 
 	}
 	if(close.compare(first) == 0)
 	{
 		// SID WU
+		//What is the format of this command "Close"
+		//need a flag in DBMS  to show which database has been opened
+		string rel_name = takens.at(1);
 		return true; 
 	}
 	if(write.compare(first) == 0)
@@ -164,11 +169,67 @@ bool Parser::validate(string input) {
 	if(show.compare(first) == 0)
 	{
 		// SID WU
+		string rel_name = takens.at(1);
 		return true; 
 	}
 	if(create.compare(first) == 0)
 	{
+		string* rel_name;
+		string* primary_key;
+		vector<Attribute>* attr_list;
 		// SID WU
+			if(tokens.at(1) == "TABLE")
+		{
+			//throw
+			string rel_name = new string(tokens.at(2));
+			
+			int i = 3;
+			
+			if(tokens.at(i) != "(")
+				//throw exception
+			else
+			{
+				//a new attribute constructure funciton is needed
+				attr_list = new vector<Attribute>;
+				
+				while(tokens.at(i + 1) != ")")
+				{
+					//case when input primary key 
+					bool has_key = false;
+					if(tokens.at(i + 1) == "PRIMARY" ) //input primary key
+					{
+						if(has_key == false)
+						{
+							i = i +2;
+							primary_key = new string(tokens.at(i));
+							key = key->substring(1, key.length - 2); //strip parenthesis
+						}
+						else // syntax error
+						{
+							//throw exception 
+						}
+					}
+
+					//case when input attributes
+					Attribute temp = Attribute(tokens.at(++i), tokens.at(++i));
+					attr_list.push_back(temp);		
+
+				if(tokens.at(i + 1) == ",")
+					continue; // input next attribute
+				else 
+				{
+					// case when we have some other key words.
+				}
+			}
+		}
+		else if(tokens.at(1) == "DATABASE")
+		{
+			string db_name = tokens.at(2);
+		}
+		else //Error operation
+		{
+		//	throw exception
+		}
 		return true; 
 	}
 	return false;

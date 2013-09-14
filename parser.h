@@ -61,7 +61,7 @@ public:
 		open = "OPEN";
 		close = "CLOSE";
 		write = "WRITE";
-		exit = "EXIT;";
+		exit = "EXIT";
 		insert = "INSERT";
 		del = "DELETE";
 		create = "CREATE";
