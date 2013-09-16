@@ -123,13 +123,6 @@ bool Parser::validate(string input) {
 			for (int i = 0; i < tokens.size(); ++i) {
 				expr += tokens[i];
 			}
-			if (expr.back() == ';') {
-				expr.pop_back();
-			}
-			else {
-				printf("Missing Semicolon.\n");
-				return false;
-			}
 			cout << "expr == " << expr << endl;
 			//parse_expr(expr);
 			//union(table1, table2);
@@ -139,13 +132,6 @@ bool Parser::validate(string input) {
 			string expr;
 			for (int i = 0; i < tokens.size(); ++i) {
 				expr += tokens[i];
-			}
-			if (expr.back() == ';') {
-				expr.pop_back();
-			}
-			else {
-				printf("Missing Semicolon.\n");
-				return false;
 			}
 			vector<string> args;
 			for (int j = 0; j < expr.size(); ++j) {
@@ -181,14 +167,7 @@ bool Parser::validate(string input) {
 		for (int i = 0; i < tokens.size(); ++i) {
 			expr += tokens[i];
 		}
-		if (expr.back() == ';') {
-			expr.erase(expr.end());
-		}
-		else {
-			printf("Missing Semicolon.\n");
-			return false;
-		}
-		cout << "expr == " << expr << endl;
+//		cout << "expr == " << expr << endl;
 		// SEND REMAINING VECTOR (WHICH SHOULD CONTAIN AN ATOMIC EXPRESSION)
 		// TO BE PARSED RECURSIVELY INTO A TABLE AND THEN SUBTRACTED FROM
 		// THE THE TABLE rel_name. ASSUMED ERROR CATCHING FOR EXPRESSION PASRING
@@ -234,7 +213,6 @@ bool Parser::validate(string input) {
 		{
 			if(equal.compare(tokens[i+1]) != 0)
 			{
-				printf("2\n");
 				return false;
 			}
 			i+=2;
@@ -455,7 +433,7 @@ bool Parser::validate(string input) {
 						numStart--;
 						if(numStart == 0)
 						{
-							bool check = validate(send);		
+							bool check = validate(send+" ;");		
 							if(!check)
 								return false;
 							else 
@@ -470,7 +448,10 @@ bool Parser::validate(string input) {
 				}
 				j=x+1;
 				if(semi.compare(tokens[j])==0)
+				{
+					printf("Query command parsed.\n\n");
 					return true;
+				}
 				break;
 			}
 		}
@@ -478,6 +459,5 @@ bool Parser::validate(string input) {
 		}
 
 	}
-	printf("Query command parsed.\n\n");
-	return true;
+	return false;
 }
