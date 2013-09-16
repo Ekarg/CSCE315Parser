@@ -17,6 +17,22 @@
 using namespace std;
 
 vector<string> Parser::tokenizer(string line) {
+	for(int i=0; i<line.length(); i++)
+	{
+		if(line.at(i)=='('||line.at(i)=='='||line.at(i)==')')
+		{
+			if(i!=0)
+				line.insert(i," ");
+			if(i!=(line.length()-2))
+				line.insert(i+2," ");
+			i+=2;
+		}
+		if(line.at(i)==';')
+		{
+			line.insert(i," ");
+			i+=2;
+		}
+	}
 	char* str = new char[line.length()+1];
 	char* next = NULL;
 	vector<string> tokens;
@@ -28,8 +44,7 @@ vector<string> Parser::tokenizer(string line) {
 	while(start!=NULL)
 	{
 		string s(start);
-		//tokens.push_back(start);
-		tokens.push_ back(s);
+		tokens.push_back(s);
 		start = strtok_s(NULL, " ", &next);
 	}
 	//START TROUBLESHOOTING ITERATOR	
@@ -49,38 +64,55 @@ vector<string> Parser::tokenizer(string line) {
 bool Parser::validate(string input) {
 	
 	vector<string> tokens = tokenizer(input);
+	if(!tokens.size()>0)
+		return false;
 	string first = tokens[0];
-
+	string s = ";";
+	if(s.compare(tokens[tokens.size()-1]) != 0)
+	{
+		printf("; expected\n");
+		return false;
+	}
 	if(open.compare(first) == 0)
 	{
 		// SID WU
-	    string rel_name = takens.at(1);
+		if(tokens.size()!=3)
+			return false;
+		if(tokens[2].back()!=';')
+			return false;
+		string rel_name = tokens.at(1);
+		printf("Open command parsed.\n\n");
 		return true; 
 	}
-	if(close.compare(first) == 0)
+	else if(close.compare(first) == 0)
 	{
 		// SID WU
-		//What is the format of this command "Close"
-		//need a flag in DBMS  to show which database has been opened
-		string rel_name = takens.at(1);
+		if(tokens.size()!=3)
+			return false;
+		if(tokens[2].back()!=';')
+			return false;
+		string rel_name = tokens.at(1);
+		printf("Close command parsed.\n\n");
 		return true; 
 	}
-	if(write.compare(first) == 0)
+	else if(write.compare(first) == 0)
 	{
 		// GRACE COFFMAN
-		if(tokens.size() != 2)
+		if(tokens.size() != 3)
 			return false;
-		if(tokens[1].back()!=';')
+		if(tokens[2].back()!=';')
 			return false;
+		string rel_name = tokens.at(1);
+		printf("Write command parsed.\n\n");
 		return true; 
 	}
-	if(exit.compare(first) == 0)
+	else if(exit.compare(first) == 0)
 	{
 		printf("Exit command parsed.\n\n");
 		// exit();
 		return true; 
 	}
-	if( (insert.compare(first) == 0) && (tokens[1] == "INTO") && (tokens[3] == "VALUES") && (tokens[4] == "FROM") && (tokens.size() > 5) )
+	else if( (insert.compare(first) == 0) && (tokens[1] == "INTO") && (tokens[3] == "VALUES") && (tokens[4] == "FROM") && (tokens.size() > 5) )
 	{
 		string rel_name = tokens[2];
 		tokens.erase(tokens.begin(), tokens.begin()+5);
@@ -137,9 +169,10 @@ bool Parser::validate(string input) {
 			//check if entity is allowable into table rel_name
 			//insert entity into tablr rel_name
 		}
+		printf("Insert command parsed.\n\n");
 		return true; 
 	}
-	if( (del.compare(first) == 0) && (tokens[1] == "FROM") && (tokens[3] == "WHERE") && (tokens.size() > 4) )
+	else if( (del.compare(first) == 0) && (tokens[1] == "FROM") && (tokens[3] == "WHERE") && (tokens.size() > 4) )
 	{
 		printf("Delete command parsed.\n\n");
 		string rel_name = tokens[2];
@@ -162,28 +195,74 @@ bool Parser::validate(string input) {
 		// TO BE HANDLED IN parse_expr. ??????????????????????????????
 		// parse_expr(expr);
 		// difference(table1, table2);
-
+		printf("Delete command parsed.\n\n");
 		return true; 
 	}
-	if(update.compare(first) == 0)
+	else if(update.compare(first) == 0)
 	{
 		// GRACE COFFMAN
+		if(tokens.size() < 10)
+			return false;
+		string last = tokens[tokens.size() - 1];
+		if(last.back() != ';')
+			printf("Error: No semi-colon\n");
+		string set = "SET";
+		if(set.compare(tokens[2]) != 0)
+			return false;
+		string wher = "WHERE";
+		if(wher.compare(tokens[3]) == 0)
+			return false;
+		int i=3;
+		string equal = "=";
+		while(wher.compare(tokens[i]) != 0 && (i+3)<tokens.size())
+		{
+			if(equal.compare(tokens[i+1]) != 0)
+			{
+				printf("1\n");
+				return false;
+			}
+			i+=3;
+		}
+		string semi = ";";
+		i++;
+		if(i>=tokens.size() )
+		{
+			cout<<"Error: conditions expected after WHERE\n";
+			return false;
+		}
+		while((i+2)<tokens.size())
+		{
+			if(equal.compare(tokens[i+1]) != 0)
+			{
+				printf("2\n");
+				return false;
+			}
+			i+=2;
+		}
+		printf("Update command parsed.\n\n");
 		return true; 
 	}
-	if(show.compare(first) == 0)
+	else if(show.compare(first) == 0)
 	{
 		// SID WU
-		string rel_name = takens.at(1);
+		if(tokens.size()!=3)
+			return false;
+		if(tokens[2].back() != ';')
+			return false;
+		string rel_name = tokens.at(1);
+		printf("Show command parsed.\n\n");
 		return true; 
 	}
-	if(create.compare(first) == 0)
+	else if(create.compare(first) == 0)
 	{
+		/*
+		// SID WU
 		string* rel_name;
 		string* primary_key;
 		vector<Attribute>* attr_list;
-		// SID WU
-			if(tokens.at(1) == "TABLE")
-		{
+ 		// SID WU
+			if(tokens.at(1) == "TABLE")	
+			{
 			//throw
 			string rel_name = new string(tokens.at(2));
 			
@@ -197,8 +276,7 @@ bool Parser::validate(string input) {
 				attr_list = new vector<Attribute>;
 				
 				while(tokens.at(i + 1) != ")")
-				{
-					//case when input primary key 
+				{					//case when input primary key 
 					bool has_key = false;
 					if(tokens.at(i + 1) == "PRIMARY" ) //input primary key
 					{
@@ -211,13 +289,12 @@ bool Parser::validate(string input) {
 						else // syntax error
 						{
 							//throw exception 
-						}
+					}
 					}
 
 					//case when input attributes
 					Attribute temp = Attribute(tokens.at(++i), tokens.at(++i));
 					attr_list.push_back(temp);		
-
 				if(tokens.at(i + 1) == ",")
 					continue; // input next attribute
 				else 
@@ -228,13 +305,179 @@ bool Parser::validate(string input) {
 		}
 		else if(tokens.at(1) == "DATABASE")
 		{
-			string db_name = tokens.at(2);
-		}
+			string db_name = tokens.at(2);		}
 		else //Error operation
 		{
 		//	throw exception
 		}
+		*/
+		if(tokens.size() < 8)
+			return false;
+		string table = "TABLE";
+		if(table.compare(tokens[1]) != 0) 
+			return false;
+		string rel_name = tokens[2];
+		string start = "(";
+		string end = ")";
+		int x=3; 
+		if(start.compare(tokens[3]) != 0)
+		{
+			printf("( expected \n");
+			return false;
+		}
+		int numStart = 1;
+		x++;
+		while(x<tokens.size() && numStart != 0)
+		{
+			//Get attributes here
+			if(end.compare(tokens[x]) == 0)
+				numStart--;
+			if(start.compare(tokens[x]) == 0)
+				numStart++;
+			x++;
+		
+		}if( x>=tokens.size())
+		{
+			printf("Missing )\n");			
+			return false;
+		}
+		string primary = "PRIMARY";
+		string key = "KEY";
+		if(primary.compare(tokens[x]) != 0)
+		{
+			printf("Keyword PRIMARY expected\n");
+			return false;
+		}
+		x++;
+		if( x>=tokens.size())
+			return false;
+		if(key.compare(tokens[x]) != 0)
+		{
+			printf("Keyword KEY expected\n");
+			return false;
+		}
+		x++;
+		if( x>=tokens.size())
+			return false;
+		if(start.compare(tokens[x]) != 0)
+		{
+			printf("( expected \n");
+			return false;
+		}
+		numStart = 1;
+		x++;
+		while(x<tokens.size() && numStart != 0)
+		{
+			//Get attributes here
+			if(end.compare(tokens[x]) == 0)
+				numStart--;
+			if(start.compare(tokens[x]) == 0)
+				numStart++;
+			x++;
+		}
+		if( x>=tokens.size())
+			return false;
+		string semi = ";";
+		if(semi.compare(tokens[x]) != 0)
+		{
+			printf("; expected\n");
+			return false;
+		}
+		x++;
+		if( x<tokens.size())
+			return false;
+		printf("Create command parsed.\n\n");
 		return true; 
 	}
-	return false;
+	else if(uni.compare(first) == 0)
+	{
+		return true;
+
+	}
+	else if(difference.compare(first) == 0)
+	{
+		return true;
+	}
+
+	else if(select.compare(first) == 0)
+	{
+		return true;
+	}
+	else if(projection.compare(first) == 0)
+	{
+		return true;
+	}
+	else if(rename.compare(first) == 0)
+	{
+		return true;
+	}
+	else // Query 
+	{
+		string keys[] = {"union", "rename","cross", "project","select","rename"};
+		int numKeys = 5;
+		//Grace Coffman	
+		if(tokens.size()<3)
+			return false;
+		if(tokens.size() == 3)
+			return true;
+		string arrow = "<-";
+		string start = "(";
+		string end = ")";
+		string semi = ";";
+		if(arrow.compare(tokens[1])!=0)
+			return false;
+		int j=2;
+		while(j<tokens.size()) 
+		{
+			string send = " ";
+			int numStart=0;
+		for(int i=0; i<numKeys; i++)
+		{
+			if(keys[i].compare(tokens[j]) == 0)
+			{
+				send = " " + tokens[j];
+				//we have found a keyword, now need to find the expression to evaluate
+				int x=j+1;
+				if(x>=tokens.size())
+					return false;
+				if(start.compare(tokens[x]) != 0)
+					return false;
+				numStart++;
+				x++;
+				while(x<tokens.size())
+				{
+					if(start.compare(tokens[x]) == 0)
+					{
+						numStart++;
+					}
+					else if(end.compare(tokens[x]) == 0)
+					{
+						numStart--;
+						if(numStart == 0)
+						{
+							bool check = validate(send);		
+							if(!check)
+								return false;
+							else 
+							{
+								j = x+1;
+								break;
+							}
+						}
+					}
+						send=send+" " + tokens[x];	
+						x++;
+				}
+				j=x+1;
+				if(semi.compare(tokens[j])==0)
+					return true;
+				break;
+			}
+		}
+
+		}
+
+	}
+	printf("Query command parsed.\n\n");
+	return true;
 }

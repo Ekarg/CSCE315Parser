@@ -55,9 +55,9 @@ public:
 	string cross;
 	string update;
 	string show;
+	string select;
 
 	Parser() { 
-		
 		open = "OPEN";
 		close = "CLOSE";
 		write = "WRITE";
@@ -72,7 +72,7 @@ public:
 		cross = "cross";
 		update = "UPDATE";
 		show = "SHOW";
-	
+		select="select";
 	}
 	vector<string> tokenizer(string input);
 	bool validate(string input);
