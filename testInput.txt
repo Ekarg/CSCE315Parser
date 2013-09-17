@@ -1,0 +1,13 @@
+OPEN animals;
+CLOSE animals;
+WRITE animals; 
+SHOW animals;
+INSERT INTO animals VALUES FROM RELATION project (kind) animals;
+CREATE TABLE mammals (kind VARCHAR(10)) PRIMARY KEY(kind);
+UPDATE animals SET name=Aggie WHERE id=2015;
+DELETE FROM animals WHERE name=Aggie;
+EXIT;
+CREATE TABLE mammals (kind VARCHAR(10));
+EXIT
+INSERT INTO animals;
+DELETE FROM WHERE name=Aggie;
